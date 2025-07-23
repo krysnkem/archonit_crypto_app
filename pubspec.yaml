@@ -34,6 +34,10 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
+  dio: ^5.8.0+1
+  retrofit: ^4.6.0
+  freezed_annotation: ^3.1.0
+  json_annotation: ^4.9.0
 
 dev_dependencies:
   flutter_test:
@@ -45,6 +49,10 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
+  build_runner: ^2.6.0
+  freezed: ^3.2.0
+  json_serializable: ^6.10.0
+  retrofit_generator: ^10.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -87,3 +95,30 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+  fonts:
+    - family: SF Pro Display
+      fonts:
+        - asset: assets/fonts/sf-pro-display/SFPRODISPLAYREGULAR.OTF
+          weight: 400
+        - asset: assets/fonts/sf-pro-display/SFPRODISPLAYMEDIUM.OTF
+          weight: 500
+        - asset: assets/fonts/sf-pro-display/SFPRODISPLAYBOLD.OTF
+          weight: 700
+        - asset: assets/fonts/sf-pro-display/SFPRODISPLAYLIGHTITALIC.OTF
+          weight: 300
+          style: italic
+        - asset: assets/fonts/sf-pro-display/SFPRODISPLAYSEMIBOLDITALIC.OTF
+          weight: 600
+          style: italic
+        - asset: assets/fonts/sf-pro-display/SFPRODISPLAYBLACKITALIC.OTF
+          weight: 900
+          style: italic
+        - asset: assets/fonts/sf-pro-display/SFPRODISPLAYHEAVYITALIC.OTF
+          weight: 800
+          style: italic
+        - asset: assets/fonts/sf-pro-display/SFPRODISPLAYTHINITALIC.OTF
+          weight: 100
+          style: italic
+        - asset: assets/fonts/sf-pro-display/SFPRODISPLAYULTRALIGHTITALIC.OTF
+          weight: 200
+          style: italic
