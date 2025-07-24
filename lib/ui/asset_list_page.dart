@@ -1,8 +1,8 @@
-import 'package:archonit_crypto_app/core/util/text_styles.dart';
 import 'package:archonit_crypto_app/logic/models/crypto_asset.dart';
 import 'package:archonit_crypto_app/logic/notifiers/crypto_list_notifier.dart';
 import 'package:archonit_crypto_app/logic/states/crypto_list_state.dart';
-import 'package:archonit_crypto_app/ui/widget/asset_list_item_widget.dart';
+import 'package:archonit_crypto_app/ui/widget/asset_list_widget.dart';
+import 'package:archonit_crypto_app/ui/widget/error_state_widget.dart';
 import 'package:flutter/material.dart';
 
 class AssetListPage extends StatefulWidget {
@@ -77,7 +77,7 @@ class _AssetListPageState extends State<AssetListPage> {
                         scrollController: _scrollController,
                       ),
                     ),
-                  ErrorWidget(
+                  ErrorStateWidget(
                     message: message,
                     onRetry: () {
                       cryptoList.isNotEmpty
@@ -121,70 +121,6 @@ class RefreshableAssetListWidget extends StatelessWidget {
         scrollController: _scrollController,
         isLoadingMore: isLoadingMore,
       ),
-    );
-  }
-}
-
-class ErrorWidget extends StatelessWidget {
-  const ErrorWidget({super.key, required this.message, required this.onRetry});
-  final String message;
-  final void Function() onRetry;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            message,
-            style: sfProText17600TextBlack.copyWith(color: Colors.red),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: onRetry,
-            child: Text('Retry', style: sfProText17600TextBlack),
-          ),
-          const SizedBox(height: 16),
-        ],
-      ),
-    );
-  }
-}
-
-class AssetListWidget extends StatelessWidget {
-  const AssetListWidget({
-    super.key,
-    required this.cryptoList,
-    this.isLoadingMore = false,
-    this.scrollController,
-  });
-
-  final List<CryptoAsset> cryptoList;
-  final bool isLoadingMore;
-  final ScrollController? scrollController;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      controller: scrollController,
-      itemCount: cryptoList.length + (isLoadingMore ? 1 : 0),
-      itemBuilder: (context, index) {
-        if (isLoadingMore && index == cryptoList.length) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        final asset = cryptoList[index];
-        return AssetListItemWidget(
-          assetId: asset.id,
-          assetName: asset.name,
-          assetSymbol: asset.symbol,
-          assetPrice: '\$${asset.price}',
-          assetColor: asset.color,
-        );
-      },
     );
   }
 }
