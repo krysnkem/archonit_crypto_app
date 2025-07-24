@@ -1,3 +1,4 @@
+import 'package:archonit_crypto_app/core/util/ui_constants.dart';
 import 'package:archonit_crypto_app/logic/models/crypto_asset.dart';
 import 'package:archonit_crypto_app/logic/notifiers/crypto_list_notifier.dart';
 import 'package:archonit_crypto_app/logic/states/crypto_list_state.dart';
@@ -42,7 +43,7 @@ class _AssetListPageState extends State<AssetListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        padding: const EdgeInsets.symmetric(horizontal: UIConstants.pageHorizontalPadding),
         child: ValueListenableBuilder(
           valueListenable: _notifier,
           builder: (context, state, child) {

@@ -1,4 +1,5 @@
 import 'package:archonit_crypto_app/core/util/text_styles.dart';
+import 'package:archonit_crypto_app/core/util/ui_constants.dart';
 import 'package:flutter/material.dart';
 
 class AssetListItemWidget extends StatelessWidget {
@@ -19,26 +20,28 @@ class AssetListItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 14),
+      padding: const EdgeInsets.symmetric(vertical: UIConstants.assetItemPadding),
       child: Row(
         children: [
           Container(
-            width: 60,
-            height: 60,
+            width: UIConstants.assetIconSize,
+            height: UIConstants.assetIconSize,
             decoration: BoxDecoration(
               color: assetColor,
-              borderRadius: BorderRadius.circular(18),
+              borderRadius: BorderRadius.circular(UIConstants.assetIconBorderRadius),
             ),
           ),
-          SizedBox(width: 16),
+          const SizedBox(width: UIConstants.assetItemSpacing),
           Expanded(
             child: Text(
-              '$assetName($assetSymbol)',
+              '$assetName ($assetSymbol)', // Added space for better readability
               style: sfProText17600TextBlack,
             ),
           ),
-
-          Text(assetPrice, style: sfProText17600TextBlack),
+          Text(
+            '\$$assetPrice', // Added dollar sign prefix
+            style: sfProText17600TextBlack,
+          ),
         ],
       ),
     );
