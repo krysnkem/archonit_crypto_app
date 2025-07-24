@@ -20,7 +20,9 @@ class AssetListItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: UIConstants.assetItemPadding),
+      padding: const EdgeInsets.symmetric(
+        vertical: UIConstants.assetItemPadding,
+      ),
       child: Row(
         children: [
           Container(
@@ -28,7 +30,9 @@ class AssetListItemWidget extends StatelessWidget {
             height: UIConstants.assetIconSize,
             decoration: BoxDecoration(
               color: assetColor,
-              borderRadius: BorderRadius.circular(UIConstants.assetIconBorderRadius),
+              borderRadius: BorderRadius.circular(
+                UIConstants.assetIconBorderRadius,
+              ),
             ),
           ),
           const SizedBox(width: UIConstants.assetItemSpacing),

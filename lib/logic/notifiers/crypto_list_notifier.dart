@@ -1,3 +1,4 @@
+
 import 'package:archonit_crypto_app/core/secrets/api_key.dart';
 import 'package:archonit_crypto_app/core/util/color_generator.dart';
 import 'package:archonit_crypto_app/core/util/string_extenstion.dart';
@@ -53,6 +54,7 @@ class CryptoListNotifier extends ValueNotifier<CryptoListState> {
             ),
           );
         }
+
         valueIndex = 1;
         value = CryptoListLoaded(cryptoList: cryptoAssets);
         break;

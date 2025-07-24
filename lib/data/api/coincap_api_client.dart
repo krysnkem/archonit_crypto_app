@@ -13,7 +13,7 @@ abstract class CoinCapApiClient {
   factory CoinCapApiClient(Dio dio, {String baseUrl}) = _CoinCapApiClient;
 
   /// Retrieve a list of assets
-  @GET("/v2/assets")
+  @GET("/v3/assets")
   Future<HttpResponse<AssetsListResponse>> getAssets(
     @Queries() AssetsQuery query,
   );

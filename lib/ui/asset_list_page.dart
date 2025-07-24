@@ -43,53 +43,58 @@ class _AssetListPageState extends State<AssetListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: UIConstants.pageHorizontalPadding),
-        child: ValueListenableBuilder(
-          valueListenable: _notifier,
-          builder: (context, state, child) {
-            return switch (state) {
-              CryptoListLoading() => const Center(
-                child: CircularProgressIndicator(),
-              ),
-              CryptoListInitial() => const Center(
-                child: CircularProgressIndicator(),
-              ),
-              CryptoListLoaded(:final cryptoList) => RefreshableAssetListWidget(
-                notifier: _notifier,
-                cryptoList: cryptoList,
-                scrollController: _scrollController,
-              ),
-              CryptoListLoadingMore(:final cryptoList) =>
-                RefreshableAssetListWidget(
-                  notifier: _notifier,
-                  cryptoList: cryptoList,
-                  scrollController: _scrollController,
-                  isLoadingMore: true,
+        padding: const EdgeInsets.symmetric(
+          horizontal: UIConstants.pageHorizontalPadding,
+        ),
+        child: SafeArea(
+          child: ValueListenableBuilder(
+            valueListenable: _notifier,
+            builder: (context, state, child) {
+              return switch (state) {
+                CryptoListLoading() => const Center(
+                  child: CircularProgressIndicator(),
                 ),
-              CryptoListError(:final message, :final cryptoList) => Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  if (cryptoList.isNotEmpty)
-                    Expanded(
-                      child: RefreshableAssetListWidget(
-                        notifier: _notifier,
-                        cryptoList: cryptoList,
-                        scrollController: _scrollController,
-                      ),
-                    ),
-                  ErrorStateWidget(
-                    message: message,
-                    onRetry: () {
-                      cryptoList.isNotEmpty
-                          ? _notifier.loadMoreAssets()
-                          : _notifier.loadAssets();
-                    },
+                CryptoListInitial() => const Center(
+                  child: CircularProgressIndicator(),
+                ),
+                CryptoListLoaded(:final cryptoList) =>
+                  RefreshableAssetListWidget(
+                    notifier: _notifier,
+                    cryptoList: cryptoList,
+                    scrollController: _scrollController,
                   ),
-                ],
-              ),
-            };
-          },
+                CryptoListLoadingMore(:final cryptoList) =>
+                  RefreshableAssetListWidget(
+                    notifier: _notifier,
+                    cryptoList: cryptoList,
+                    scrollController: _scrollController,
+                    isLoadingMore: true,
+                  ),
+                CryptoListError(:final message, :final cryptoList) => Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    if (cryptoList.isNotEmpty)
+                      Expanded(
+                        child: RefreshableAssetListWidget(
+                          notifier: _notifier,
+                          cryptoList: cryptoList,
+                          scrollController: _scrollController,
+                        ),
+                      ),
+                    ErrorStateWidget(
+                      message: message,
+                      onRetry: () {
+                        cryptoList.isNotEmpty
+                            ? _notifier.loadMoreAssets()
+                            : _notifier.loadAssets();
+                      },
+                    ),
+                  ],
+                ),
+              };
+            },
+          ),
         ),
       ),
     );
