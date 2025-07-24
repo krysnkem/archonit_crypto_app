@@ -34,15 +34,15 @@ void main() {
     });
 
     test('ValueNotifier loads assets correctly', () async {
-      expect(notifier.value, isA<CryptoListInitial>());
+      expect(notifier.state, isA<CryptoListInitial>());
       
       await notifier.loadAssets();
       
-      expect(notifier.value, isNot(isA<CryptoListInitial>()));
-      print('Notifier state: ${notifier.value.runtimeType}');
+      expect(notifier.state, isNot(isA<CryptoListInitial>()));
+      print('Notifier state: ${notifier.state.runtimeType}');
       
-      if (notifier.value is CryptoListLoaded) {
-        final loaded = notifier.value as CryptoListLoaded;
+      if (notifier.state is CryptoListLoaded) {
+        final loaded = notifier.state as CryptoListLoaded;
         print('Loaded ${loaded.cryptoList.length} assets');
         for (final asset in loaded.cryptoList.take(3)) {
           print('Asset: ${asset.name} (${asset.symbol}) - \$${asset.price}');

@@ -5,24 +5,28 @@ import 'package:archonit_crypto_app/logic/states/crypto_list_state.dart';
 import 'package:archonit_crypto_app/ui/widget/asset_list_widget.dart';
 import 'package:archonit_crypto_app/ui/widget/error_state_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AssetListPage extends StatefulWidget {
+class AssetListPage extends ConsumerStatefulWidget {
   const AssetListPage({super.key});
 
   @override
-  State<AssetListPage> createState() => _AssetListPageState();
+  ConsumerState<AssetListPage> createState() => _AssetListPageState();
 }
 
-class _AssetListPageState extends State<AssetListPage> {
+class _AssetListPageState extends ConsumerState<AssetListPage> {
   late CryptoListNotifier _notifier;
   final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
-    _notifier = cryptoListValuNotifier;
-    _notifier.loadAssets();
+    _notifier = ref.read(cryptoListNotifierProvider.notifier);
     _scrollController.addListener(_setupScrollLoadMoreLogic);
+    //Due to changes from ValueNotifier to NotifierProvider, we need to call loadAssets here
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _notifier.loadAssets();
+    });
   }
 
   @override
@@ -41,60 +45,55 @@ class _AssetListPageState extends State<AssetListPage> {
 
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(cryptoListNotifierProvider);
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: UIConstants.pageHorizontalPadding,
         ),
         child: SafeArea(
-          child: ValueListenableBuilder(
-            valueListenable: _notifier,
-            builder: (context, state, child) {
-              return switch (state) {
-                CryptoListLoading() => const Center(
-                  child: CircularProgressIndicator(),
-                ),
-                CryptoListInitial() => const Center(
-                  child: CircularProgressIndicator(),
-                ),
-                CryptoListLoaded(:final cryptoList) =>
-                  RefreshableAssetListWidget(
-                    notifier: _notifier,
-                    cryptoList: cryptoList,
-                    scrollController: _scrollController,
-                  ),
-                CryptoListLoadingMore(:final cryptoList) =>
-                  RefreshableAssetListWidget(
-                    notifier: _notifier,
-                    cryptoList: cryptoList,
-                    scrollController: _scrollController,
-                    isLoadingMore: true,
-                  ),
-                CryptoListError(:final message, :final cryptoList) => Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    if (cryptoList.isNotEmpty)
-                      Expanded(
-                        child: RefreshableAssetListWidget(
-                          notifier: _notifier,
-                          cryptoList: cryptoList,
-                          scrollController: _scrollController,
-                        ),
-                      ),
-                    ErrorStateWidget(
-                      message: message,
-                      onRetry: () {
-                        cryptoList.isNotEmpty
-                            ? _notifier.loadMoreAssets()
-                            : _notifier.loadAssets();
-                      },
+          child: switch (state) {
+            CryptoListLoading() => const Center(
+              child: CircularProgressIndicator(),
+            ),
+            CryptoListInitial() => const Center(
+              child: CircularProgressIndicator(),
+            ),
+            CryptoListLoaded(:final cryptoList) => RefreshableAssetListWidget(
+              notifier: _notifier,
+              cryptoList: cryptoList,
+              scrollController: _scrollController,
+            ),
+            CryptoListLoadingMore(:final cryptoList) =>
+              RefreshableAssetListWidget(
+                notifier: _notifier,
+                cryptoList: cryptoList,
+                scrollController: _scrollController,
+                isLoadingMore: true,
+              ),
+            CryptoListError(:final message, :final cryptoList) => Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                if (cryptoList.isNotEmpty)
+                  Expanded(
+                    child: RefreshableAssetListWidget(
+                      notifier: _notifier,
+                      cryptoList: cryptoList,
+                      scrollController: _scrollController,
                     ),
-                  ],
+                  ),
+                ErrorStateWidget(
+                  message: message,
+                  onRetry: () {
+                    cryptoList.isNotEmpty
+                        ? _notifier.loadMoreAssets()
+                        : _notifier.loadAssets();
+                  },
                 ),
-              };
-            },
-          ),
+              ],
+            ),
+          },
         ),
       ),
     );
