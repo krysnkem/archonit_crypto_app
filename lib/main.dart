@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
+  // Initialize the app with Riverpod's ProviderScope
   runApp(ProviderScope(child: const MyApp()));
 }
 

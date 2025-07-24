@@ -11,6 +11,7 @@ import 'package:archonit_crypto_app/logic/states/crypto_list_state.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+// Changed from ValueNotifier to Riverpod's Notifier
 class CryptoListNotifier extends Notifier<CryptoListState> {
   CryptoListNotifier({required ICoinCapRepository coinCapRepository})
     : _coinCapRepository = coinCapRepository;

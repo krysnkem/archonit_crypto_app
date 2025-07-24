@@ -23,7 +23,7 @@ class _AssetListPageState extends ConsumerState<AssetListPage> {
     super.initState();
     _notifier = ref.read(cryptoListNotifierProvider.notifier);
     _scrollController.addListener(_setupScrollLoadMoreLogic);
-    //Due to changes from ValueNotifier to NotifierProvider, we need to call loadAssets here
+    //Due to changes from ValueNotifier to Riverpod's Notifier, we need to call loadAssets here
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _notifier.loadAssets();
     });
