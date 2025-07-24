@@ -62,8 +62,8 @@ flutter test
 
 ## State Management Branches
 
-- `main`: **ValueNotifier** implementation (current)
-- `feature/bloc-implementation`: BLoC pattern with events/states
-- `feature/riverpod-implementation`: Riverpod with code generation
+- `main/vanilla`: **ValueNotifier** implementation (current)
+- `main/bloc`: BLoC pattern with events/states
+- `main/riverpod`: Riverpod with code generation
 
 *Each branch implements the same features using different state management approaches.*
