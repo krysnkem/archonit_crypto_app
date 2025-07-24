@@ -60,10 +60,32 @@ flutter run
 flutter test
 ```
 
-## State Management Branches
+## 🌿 State Management Implementations
 
-- `main/vanilla`: **ValueNotifier** implementation (current)
-- `alt/riverpod`: Riverpod with code generation
-- `alt/bloc`: BLoC pattern with events/states
+This project showcases **three different state management approaches** for the same cryptocurrency app:
 
-*Each branch implements the same features using different state management approaches.*
+### 📋 Branch Overview
+
+| Branch | State Management | Description | Status |
+|--------|------------------|-------------|--------|
+| [`main/vanilla`](../../tree/main/vanilla) | **ValueNotifier** | Baseline Flutter implementation | ✅ **Current** |
+| [`alt/riverpod`](../../tree/alt/riverpod) | **Riverpod** | Modern reactive state management | ✅ Complete |
+| [`alt/bloc-cubit`](../../tree/alt/bloc-cubit) | **BLoC Cubit** | Enterprise state management | ✅ Complete |
+
+### 🎯 **Why Multiple Implementations?**
+
+- **📚 Learning**: Compare different architectural approaches
+- **🔍 Portfolio**: Demonstrate mastery of multiple patterns  
+- **⚖️ Decision Making**: Understand trade-offs between approaches
+- **🏢 Enterprise Ready**: Show adaptability to different project requirements
+
+### 🏗️ **Consistent Architecture**
+
+All branches maintain the **same clean architecture**:
+- ✅ **Requirements Compliance**: Figma design, pagination, color generation
+- ✅ **Repository Pattern**: Clean separation of business logic
+- ✅ **API Integration**: Professional Dio + Retrofit implementation
+- ✅ **Testing Strategy**: Comprehensive test coverage
+- ✅ **Code Quality**: Flutter best practices across all implementations
+
+*Switch between branches to explore different state management patterns while maintaining identical functionality.*
