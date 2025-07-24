@@ -1,3 +1,5 @@
+import 'package:archonit_crypto_app/core/routing/fade_navigator_extenstion.dart';
+import 'package:archonit_crypto_app/core/routing/routing.dart';
 import 'package:archonit_crypto_app/core/util/pngs.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +11,15 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(seconds: 2), () {
+      if (!mounted) return;
+      context.pushReplacementFade(RoutePath.assetList);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

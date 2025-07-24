@@ -1,4 +1,4 @@
-import 'package:archonit_crypto_app/ui/splash_page.dart';
+import 'package:archonit_crypto_app/core/routing/routing.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -16,7 +16,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
       ),
-      home: SplashPage(),
+      initialRoute: RoutePath.splash,
+      onGenerateRoute: Routing.onGenerateRoute,
+      debugShowCheckedModeBanner: false,
     );
   }
 }
