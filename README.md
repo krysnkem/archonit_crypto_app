@@ -43,6 +43,24 @@ CoinCap API
 - **Data Models**: Freezed (immutable classes)
 - **API**: CoinCap REST API
 - **Architecture**: Clean Architecture with Repository Pattern
+- **Code Generation**: Custom `api_gen` tool (coming soon to [pub.dev](https://pub.dev))
+
+## 🛠️ Custom Tooling
+
+### **api_gen** - REST API Client Generator
+
+This project uses a **custom-built code generation tool** developed by [@krysnkem](https://github.com/krysnkem):
+
+- **🎯 Purpose**: Generates type-safe Retrofit API clients from OpenAPI/REST documentation
+- **🔧 Used For**: CoinCap API client generation (`lib/data/api/coincap_api_client.dart`)
+- **📦 Status**: Coming soon to [pub.dev](https://pub.dev) 
+- **🏗️ Benefits**: 
+  - Automated API client generation
+  - Type-safe HTTP calls
+  - Reduced boilerplate code
+  - Consistent API integration patterns
+
+*The generated API client demonstrates production-ready patterns for REST API integration in Flutter.*
 
 ## Quick Start
 
