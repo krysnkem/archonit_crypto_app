@@ -1,4 +1,4 @@
-import 'package:archonit_crypto_app/ui/asset_list_page.dart';
+import 'package:archonit_crypto_app/ui/splash_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
       ),
-      home: AssetListPage(),
+      home: SplashPage(),
     );
   }
 }
