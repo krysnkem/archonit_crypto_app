@@ -1,4 +1,3 @@
-
 import 'package:archonit_crypto_app/core/secrets/api_key.dart';
 import 'package:archonit_crypto_app/core/util/color_generator.dart';
 import 'package:archonit_crypto_app/core/util/string_extenstion.dart';
@@ -9,13 +8,15 @@ import 'package:archonit_crypto_app/data/repository/result.dart';
 import 'package:archonit_crypto_app/data/setup_coin_cap_api_client.dart';
 import 'package:archonit_crypto_app/logic/models/crypto_asset.dart';
 import 'package:archonit_crypto_app/logic/states/crypto_list_state.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class CryptoListNotifier extends ValueNotifier<CryptoListState> {
-  CryptoListNotifier({required ICoinCapRepository coinCapRepository})
+class CryptoListCubit extends Cubit<CryptoListState> {
+  CryptoListCubit({required ICoinCapRepository coinCapRepository})
     : _coinCapRepository = coinCapRepository,
-      super(CryptoListInitial());
+      super(CryptoListInitial()) {
+    loadAssets();
+  }
 
   final ICoinCapRepository _coinCapRepository;
 
@@ -25,14 +26,14 @@ class CryptoListNotifier extends ValueNotifier<CryptoListState> {
   int get offset => valueIndex * limit;
 
   Future<void> loadAssets() async {
-    value = CryptoListLoading();
+    emit(CryptoListLoading());
     final result = await _coinCapRepository.getAssets(
       AssetsQuery(limit: limit, offset: 0),
     );
     switch (result) {
       case Success<AssetsListResponse>(:final data):
         if (data == null || data.data?.isEmpty == true) {
-          value = CryptoListError(message: 'No assets found.');
+          emit(CryptoListError(message: 'No assets found.'));
           return;
         }
         final List<CryptoAsset> cryptoAssets = [];
@@ -56,29 +57,29 @@ class CryptoListNotifier extends ValueNotifier<CryptoListState> {
         }
 
         valueIndex = 1;
-        value = CryptoListLoaded(cryptoList: cryptoAssets);
+        emit(CryptoListLoaded(cryptoList: cryptoAssets));
         break;
       case Failure(:final message):
-        value = CryptoListError(message: message, cryptoList: value.cryptoList);
+        emit(CryptoListError(message: message, cryptoList: state.cryptoList));
         break;
     }
   }
 
   void loadMoreAssets() async {
-    if (value is CryptoListLoading || value is CryptoListLoadingMore) return;
+    if (state is CryptoListLoading || state is CryptoListLoadingMore) return;
 
-    final currentState = value;
+    final currentState = state;
     if (currentState is CryptoListLoaded ||
         (currentState is CryptoListError &&
             currentState.cryptoList.isNotEmpty)) {
-      value = CryptoListLoadingMore(cryptoList: currentState.cryptoList);
+      emit(CryptoListLoadingMore(cryptoList: currentState.cryptoList));
       final result = await _coinCapRepository.getAssets(
         AssetsQuery(limit: limit, offset: offset),
       );
       switch (result) {
         case Success<AssetsListResponse>(:final data):
           if (data == null || data.data?.isEmpty == true) {
-            value = CryptoListLoaded(cryptoList: currentState.cryptoList);
+            emit(CryptoListLoaded(cryptoList: currentState.cryptoList));
             return;
           }
           final List<CryptoAsset> updatedCryptoAssets = List.from(
@@ -103,12 +104,14 @@ class CryptoListNotifier extends ValueNotifier<CryptoListState> {
             );
           }
           valueIndex++;
-          value = CryptoListLoaded(cryptoList: updatedCryptoAssets);
+          emit(CryptoListLoaded(cryptoList: updatedCryptoAssets));
           break;
         case Failure(:final message):
-          value = CryptoListError(
-            message: message,
-            cryptoList: currentState.cryptoList,
+          emit(
+            CryptoListError(
+              message: message,
+              cryptoList: currentState.cryptoList,
+            ),
           );
           break;
       }
@@ -116,6 +119,6 @@ class CryptoListNotifier extends ValueNotifier<CryptoListState> {
   }
 }
 
-final cryptoListValuNotifier = CryptoListNotifier(
+final cryptoListValuNotifier = CryptoListCubit(
   coinCapRepository: CoinCapRepository(setUpCoinCapApiClient(COINCAP_API_KEY)),
 );

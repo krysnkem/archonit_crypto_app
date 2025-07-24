@@ -11,12 +11,12 @@ Cryptocurrency listing application with pagination and dynamic color generation.
 - 🔄 Pull-to-refresh functionality
 - ⚡ Loading states and error handling
 
-## Architecture - ValueNotifier Pattern
+## Architecture - BLoC-Cubit Pattern
 
 ```
-UI Layer
+UI Layer (BlocBuilder)
   ↓
-ValueNotifier (State Management)
+BLoC Cubit (State Management)
   ↓
 Repository (Business Logic + Safe Call)
   ↓
@@ -28,8 +28,8 @@ CoinCap API
 ```
 
 ### State Management Flow
-- **UI Widgets** → Listen to `ValueNotifier` changes
-- **ValueNotifier** → Manages state with sealed classes (`CryptoListState`)
+- **UI Widgets** → `BlocBuilder` listens to Cubit state changes
+- **BLoC Cubit** → Manages state with `emit()` and sealed classes (`CryptoListState`)
 - **Repository** → Handles business logic with `Result<T>` pattern
 - **Safe Call** → Wraps API calls with try-catch error handling
 - **API Client** → Type-safe Retrofit client with Dio
@@ -38,7 +38,7 @@ CoinCap API
 ## Tech Stack
 
 - **Flutter**: 3.32.2+
-- **State Management**: ValueNotifier
+- **State Management**: BLoC (Cubit)
 - **HTTP Client**: Dio + Retrofit
 - **Data Models**: Freezed (immutable classes)
 - **API**: CoinCap REST API
@@ -62,8 +62,8 @@ flutter test
 
 ## State Management Branches
 
-- `main/vanilla`: **ValueNotifier** implementation (current)
-- `alt/riverpod`: Riverpod with code generation
-- `alt/bloc`: BLoC pattern with events/states
+- `main/vanilla`: **ValueNotifier** implementation
+- `alt/riverpod`: Riverpod with NotifierProvider
+- `alt/bloc-cubit`: **BLoC Cubit** pattern (current)
 
 *Each branch implements the same features using different state management approaches.*

@@ -1,10 +1,11 @@
 import 'package:archonit_crypto_app/core/util/ui_constants.dart';
 import 'package:archonit_crypto_app/logic/models/crypto_asset.dart';
-import 'package:archonit_crypto_app/logic/notifiers/crypto_list_notifier.dart';
+import 'package:archonit_crypto_app/logic/notifiers/crypto_list_cubit.dart';
 import 'package:archonit_crypto_app/logic/states/crypto_list_state.dart';
 import 'package:archonit_crypto_app/ui/widget/asset_list_widget.dart';
 import 'package:archonit_crypto_app/ui/widget/error_state_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AssetListPage extends StatefulWidget {
   const AssetListPage({super.key});
@@ -14,14 +15,12 @@ class AssetListPage extends StatefulWidget {
 }
 
 class _AssetListPageState extends State<AssetListPage> {
-  late CryptoListNotifier _notifier;
   final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
-    _notifier = cryptoListValuNotifier;
-    _notifier.loadAssets();
+
     _scrollController.addListener(_setupScrollLoadMoreLogic);
   }
 
@@ -35,7 +34,7 @@ class _AssetListPageState extends State<AssetListPage> {
   void _setupScrollLoadMoreLogic() {
     if (_scrollController.position.pixels != 0 &&
         _scrollController.position.atEdge) {
-      _notifier.loadMoreAssets();
+      context.read<CryptoListCubit>().loadMoreAssets();
     }
   }
 
@@ -47,9 +46,9 @@ class _AssetListPageState extends State<AssetListPage> {
           horizontal: UIConstants.pageHorizontalPadding,
         ),
         child: SafeArea(
-          child: ValueListenableBuilder(
-            valueListenable: _notifier,
-            builder: (context, state, child) {
+          child: BlocBuilder<CryptoListCubit, CryptoListState>(
+            builder: (context, state) {
+              final notifier = context.read<CryptoListCubit>();
               return switch (state) {
                 CryptoListLoading() => const Center(
                   child: CircularProgressIndicator(),
@@ -59,13 +58,13 @@ class _AssetListPageState extends State<AssetListPage> {
                 ),
                 CryptoListLoaded(:final cryptoList) =>
                   RefreshableAssetListWidget(
-                    notifier: _notifier,
+                    notifier: notifier,
                     cryptoList: cryptoList,
                     scrollController: _scrollController,
                   ),
                 CryptoListLoadingMore(:final cryptoList) =>
                   RefreshableAssetListWidget(
-                    notifier: _notifier,
+                    notifier: notifier,
                     cryptoList: cryptoList,
                     scrollController: _scrollController,
                     isLoadingMore: true,
@@ -77,7 +76,7 @@ class _AssetListPageState extends State<AssetListPage> {
                     if (cryptoList.isNotEmpty)
                       Expanded(
                         child: RefreshableAssetListWidget(
-                          notifier: _notifier,
+                          notifier: notifier,
                           cryptoList: cryptoList,
                           scrollController: _scrollController,
                         ),
@@ -86,8 +85,8 @@ class _AssetListPageState extends State<AssetListPage> {
                       message: message,
                       onRetry: () {
                         cryptoList.isNotEmpty
-                            ? _notifier.loadMoreAssets()
-                            : _notifier.loadAssets();
+                            ? notifier.loadMoreAssets()
+                            : notifier.loadAssets();
                       },
                     ),
                   ],
@@ -104,14 +103,14 @@ class _AssetListPageState extends State<AssetListPage> {
 class RefreshableAssetListWidget extends StatelessWidget {
   const RefreshableAssetListWidget({
     super.key,
-    required CryptoListNotifier notifier,
+    required CryptoListCubit notifier,
     required this.cryptoList,
     required ScrollController scrollController,
     this.isLoadingMore = false,
   }) : _notifier = notifier,
        _scrollController = scrollController;
 
-  final CryptoListNotifier _notifier;
+  final CryptoListCubit _notifier;
   final List<CryptoAsset> cryptoList;
   final ScrollController _scrollController;
   final bool isLoadingMore;
