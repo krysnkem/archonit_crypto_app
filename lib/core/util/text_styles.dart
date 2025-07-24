@@ -5,4 +5,5 @@ const TextStyle sfProText17600TextBlack = TextStyle(
   fontFamily: 'SF Pro Display',
   fontSize: 17.0,
   color: textBlack,
+  fontWeight: FontWeight.w700,
 );

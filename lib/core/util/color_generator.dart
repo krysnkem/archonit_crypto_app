@@ -11,6 +11,6 @@ class ColorGenerator {
       _random.nextInt(256),
       _random.nextInt(256),
       _random.nextInt(256),
-    );
+    ).withAlpha((0.2 * 255).toInt());
   }
 }

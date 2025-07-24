@@ -20,14 +20,26 @@ class AssetListItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 14),
-      child: ListTile(
-        leading: Container(
-          width: 56,
-          height: 56,
-          decoration: BoxDecoration(color: assetColor),
-        ),
-        title: Text('$assetName($assetSymbol)', style: sfProText17600TextBlack),
-        trailing: Text(assetPrice, style: sfProText17600TextBlack),
+      child: Row(
+        children: [
+          Container(
+            width: 60,
+            height: 60,
+            decoration: BoxDecoration(
+              color: assetColor,
+              borderRadius: BorderRadius.circular(18),
+            ),
+          ),
+          SizedBox(width: 16),
+          Expanded(
+            child: Text(
+              '$assetName($assetSymbol)',
+              style: sfProText17600TextBlack,
+            ),
+          ),
+
+          Text(assetPrice, style: sfProText17600TextBlack),
+        ],
       ),
     );
   }

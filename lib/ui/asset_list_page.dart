@@ -144,7 +144,7 @@ class AssetListWidget extends StatelessWidget {
           assetId: asset.id,
           assetName: asset.name,
           assetSymbol: asset.symbol,
-          assetPrice: asset.price,
+          assetPrice: '\$${asset.price}',
           assetColor: asset.color,
         );
       },
