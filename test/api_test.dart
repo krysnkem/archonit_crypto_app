@@ -7,16 +7,15 @@ import 'package:archonit_crypto_app/data/setup_coin_cap_api_client.dart';
 import 'package:archonit_crypto_app/data/api/coincap_api_models.dart';
 import 'package:archonit_crypto_app/data/repository/coin_cap_repository/coin_cap_repository.dart';
 import 'package:archonit_crypto_app/logic/notifiers/crypto_list_notifier.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
   group('API Layer Tests', () {
     late CoinCapRepository repository;
-    late CryptoListNotifier notifier;
 
     setUp(() {
       final apiClient = setUpCoinCapApiClient(COINCAP_API_KEY);
       repository = CoinCapRepository(apiClient);
-      notifier = CryptoListNotifier(coinCapRepository: repository);
     });
 
     test('API client setup with interceptors', () {
@@ -33,18 +32,26 @@ void main() {
       print('API Result: $result');
     });
 
-    test('ValueNotifier loads assets correctly', () async {
-      expect(notifier.state, isA<CryptoListInitial>());
+    test('Riverpod Notifier loads assets correctly', () async {
+      // Create a ProviderContainer for testing
+      final container = ProviderContainer();
+      addTearDown(container.dispose);
+      
+      // Get the notifier from the container
+      final notifier = container.read(cryptoListNotifierProvider.notifier);
+      final initialState = container.read(cryptoListNotifierProvider);
+      
+      expect(initialState, isA<CryptoListInitial>());
       
       await notifier.loadAssets();
       
-      expect(notifier.state, isNot(isA<CryptoListInitial>()));
-      print('Notifier state: ${notifier.state.runtimeType}');
+      final finalState = container.read(cryptoListNotifierProvider);
+      expect(finalState, isNot(isA<CryptoListInitial>()));
+      print('Notifier state: ${finalState.runtimeType}');
       
-      if (notifier.state is CryptoListLoaded) {
-        final loaded = notifier.state as CryptoListLoaded;
-        print('Loaded ${loaded.cryptoList.length} assets');
-        for (final asset in loaded.cryptoList.take(3)) {
+      if (finalState is CryptoListLoaded) {
+        print('Loaded ${finalState.cryptoList.length} assets');
+        for (final asset in finalState.cryptoList.take(3)) {
           print('Asset: ${asset.name} (${asset.symbol}) - \$${asset.price}');
         }
       }
