@@ -66,7 +66,9 @@ class CryptoListNotifier extends ValueNotifier<CryptoListState> {
     if (value is CryptoListLoading || value is CryptoListLoadingMore) return;
 
     final currentState = value;
-    if (currentState is CryptoListLoaded) {
+    if (currentState is CryptoListLoaded ||
+        (currentState is CryptoListError &&
+            currentState.cryptoList.isNotEmpty)) {
       value = CryptoListLoadingMore(cryptoList: currentState.cryptoList);
       final result = await _coinCapRepository.getAssets(
         AssetsQuery(limit: limit, offset: offset),

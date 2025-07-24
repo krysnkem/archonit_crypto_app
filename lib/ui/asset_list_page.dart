@@ -53,22 +53,26 @@ class _AssetListPageState extends State<AssetListPage> {
               CryptoListInitial() => const Center(
                 child: CircularProgressIndicator(),
               ),
-              CryptoListLoaded(:final cryptoList) => AssetListWidget(
+              CryptoListLoaded(:final cryptoList) => RefreshableAssetListWidget(
+                notifier: _notifier,
                 cryptoList: cryptoList,
                 scrollController: _scrollController,
               ),
-              CryptoListLoadingMore(:final cryptoList) => AssetListWidget(
-                cryptoList: cryptoList,
-                isLoadingMore: true,
-                scrollController: _scrollController,
-              ),
+              CryptoListLoadingMore(:final cryptoList) =>
+                RefreshableAssetListWidget(
+                  notifier: _notifier,
+                  cryptoList: cryptoList,
+                  scrollController: _scrollController,
+                  isLoadingMore: true,
+                ),
               CryptoListError(:final message, :final cryptoList) => Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   if (cryptoList.isNotEmpty)
                     Expanded(
-                      child: AssetListWidget(
+                      child: RefreshableAssetListWidget(
+                        notifier: _notifier,
                         cryptoList: cryptoList,
                         scrollController: _scrollController,
                       ),
@@ -76,7 +80,9 @@ class _AssetListPageState extends State<AssetListPage> {
                   ErrorWidget(
                     message: message,
                     onRetry: () {
-                      _notifier.loadAssets();
+                      cryptoList.isNotEmpty
+                          ? _notifier.loadMoreAssets()
+                          : _notifier.loadAssets();
                     },
                   ),
                 ],
@@ -84,6 +90,36 @@ class _AssetListPageState extends State<AssetListPage> {
             };
           },
         ),
+      ),
+    );
+  }
+}
+
+class RefreshableAssetListWidget extends StatelessWidget {
+  const RefreshableAssetListWidget({
+    super.key,
+    required CryptoListNotifier notifier,
+    required this.cryptoList,
+    required ScrollController scrollController,
+    this.isLoadingMore = false,
+  }) : _notifier = notifier,
+       _scrollController = scrollController;
+
+  final CryptoListNotifier _notifier;
+  final List<CryptoAsset> cryptoList;
+  final ScrollController _scrollController;
+  final bool isLoadingMore;
+
+  @override
+  Widget build(BuildContext context) {
+    return RefreshIndicator.adaptive(
+      onRefresh: () async {
+        await _notifier.loadAssets();
+      },
+      child: AssetListWidget(
+        cryptoList: cryptoList,
+        scrollController: _scrollController,
+        isLoadingMore: isLoadingMore,
       ),
     );
   }
@@ -105,6 +141,7 @@ class ErrorWidget extends StatelessWidget {
           Text(
             message,
             style: sfProText17600TextBlack.copyWith(color: Colors.red),
+            textAlign: TextAlign.center,
           ),
           const SizedBox(height: 16),
           ElevatedButton(
