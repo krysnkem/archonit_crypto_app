@@ -13,6 +13,6 @@ class ColorGenerator {
       _random.nextInt(256), // Red: 0-255
       _random.nextInt(256), // Green: 0-255
       _random.nextInt(256), // Blue: 0-255
-    );
+    ).withAlpha((0.2 * 255).toInt());
   }
 }
