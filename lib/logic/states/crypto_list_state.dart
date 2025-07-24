@@ -9,9 +9,13 @@ sealed class CryptoListState extends Equatable {
   List<Object?> get props => [cryptoList];
 }
 
-class CryptoListInitial extends CryptoListState {}
+class CryptoListInitial extends CryptoListState {
+  const CryptoListInitial();
+}
 
-class CryptoListLoading extends CryptoListState {}
+class CryptoListLoading extends CryptoListState {
+  const CryptoListLoading();
+}
 
 class CryptoListLoaded extends CryptoListState {
   const CryptoListLoaded({required super.cryptoList});

@@ -8,7 +8,7 @@ import 'coincap_api_models.dart';
 part 'coincap_api_client.g.dart';
 
 /// Coincap OpenAPI Client (Production-Ready)
-@RestApi(baseUrl: "https://api.example.com")
+@RestApi(baseUrl: "https://rest.coincap.io")
 abstract class CoinCapApiClient {
   factory CoinCapApiClient(Dio dio, {String baseUrl}) = _CoinCapApiClient;
 
