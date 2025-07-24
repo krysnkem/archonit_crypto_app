@@ -14,7 +14,7 @@ Cryptocurrency listing application with pagination and dynamic color generation.
 ## Architecture - Riverpod Pattern
 
 ```
-UI Layer (ConsumerWidget)
+UI Layer (ConsumerStatefulWidget)
   ↓
 Riverpod Notifier (State Management)
   ↓
