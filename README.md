@@ -62,6 +62,24 @@ This project uses a **custom-built code generation tool** developed by [@krysnke
 
 *The generated API client demonstrates production-ready patterns for REST API integration in Flutter.*
 
+## 🔑 API Setup
+
+### Prerequisites
+Before running the app, you need to obtain a free API key from CoinCap.
+
+### Step 1: Get CoinCap API Key
+1. Visit [CoinCap API Documentation](https://docs.coincap.io)
+2. Sign up for a free account
+3. Generate your API key from the dashboard
+
+### Step 2: Configure API Key
+1. Navigate to the project root directory
+2. Check the `.gitignore` file to locate the secrets folder path
+3. Create the secrets folder structure as specified in `.gitignore`
+4. Place your API key in the designated file location
+
+**Note**: The API key file is gitignored for security. Never commit API keys to version control.
+
 ## Quick Start
 
 ```bash
